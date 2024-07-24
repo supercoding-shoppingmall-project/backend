@@ -2,6 +2,7 @@ package com.github.project2.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = {""},
+        basePackages = {"com.github.project2.repository.user"},
         entityManagerFactoryRef = "entityManagerFactoryBean1"
 )
 public class JpaConfig {
@@ -27,12 +28,10 @@ public class JpaConfig {
 
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean1() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean1(@Qualifier("dataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("com.github.project1.Entity.comment",
-                "com.github.project1.Entity.post",
-                "com.github.project1.Entity.user"
+        em.setPackagesToScan("com.github.project2.entity.user", "com.github.project2.entity.user.enums"
         );
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
