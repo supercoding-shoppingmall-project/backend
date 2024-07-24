@@ -51,6 +51,6 @@ public class UserEntity {
     private Status status;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;    // 생성일자
 
 }
