@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mariadb://database-1.cpeoyq8kyjgq.ap-northeast-2.rds.amazonaws.com:3306/test"
+    url: "jdbc:mariadb://database-1.cpeoyq8kyjgq.ap-northeast-2.rds.amazonaws.com:3306/project2"
     username: root
     password: spmariadbpw
 
