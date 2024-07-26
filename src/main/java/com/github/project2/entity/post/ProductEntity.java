@@ -29,7 +29,7 @@ public class ProductEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    private ProductCategoryEntity categoryId;
+    private ProductCategoryEntity category;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -55,7 +55,7 @@ public class ProductEntity {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createAt;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
