@@ -11,20 +11,26 @@ import com.github.project2.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-
     public void signup(UserBody userBody) {
+        UserEntity foundedUser = userRepository.findUserByEmail(userBody.getEmail());
+        if (foundedUser != null) {
+            throw new InvalidValueException("이미 존재하는 Email입니다.");
+        }
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userBody.getEmail());
         userEntity.setPassword(userBody.getPassword());
@@ -46,5 +52,15 @@ public class UserService {
         // token 생성
         String token = jwtTokenProvider.generateToken(loginRequest.getEmail());
         return token;
+    }
+
+
+    public UserDetails loadUserByUsername(String email) {
+        UserEntity userEntity = userRepository.findUserByEmail(email);
+        if (userEntity == null) {
+            throw new NotFoundException("사용자를 찾을 수 없습니다.");
+        }
+        // UserDetails 객체를 생성하여 반환
+        return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(), new ArrayList<>());
     }
 }
