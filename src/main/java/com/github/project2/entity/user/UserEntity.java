@@ -1,5 +1,6 @@
 package com.github.project2.entity.user;
 
+import com.github.project2.dto.user.UserBody;
 import com.github.project2.entity.user.enums.Gender;
 import com.github.project2.entity.user.enums.Role;
 import com.github.project2.entity.user.enums.Status;
