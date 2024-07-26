@@ -36,13 +36,21 @@ dependencies {
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
+    // Jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // Javax
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.2'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
