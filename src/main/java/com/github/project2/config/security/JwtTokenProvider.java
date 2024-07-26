@@ -1,5 +1,6 @@
 package com.github.project2.config.security;
 
+import com.github.project2.service.exceptions.NotFoundException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,12 +34,19 @@ public class JwtTokenProvider {
 
     private long tokenValidMillisecond = 1000L * 60 * 60;; // 1시간
 
-    private final UserDetailsService userDetailsService;
-
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Baerer");
+    public String extractUserEmail(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).getBody();
+        return claims.getSubject();
     }
 
+    public String resolveToken(HttpServletRequest request) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header != null && header.startsWith("Bearer ")) {
+            return header.substring(7); // Bearer + 공백 제거
+        }else{
+            throw new NotFoundException("토큰이 존재하지 않습니다.");
+        }
+    }
     // token 발급
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
@@ -61,14 +70,4 @@ public class JwtTokenProvider {
             return false;
         }
     }
-
-    // 유저 인증
-//    public Authentication getAuthentication(String token) {
-//        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).getBody();
-//        final String extractedEmail = claims.getSubject();  // Claim 에서 Email 추출
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(extractedEmail);
-//        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-//    }
-
-
 }
