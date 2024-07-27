@@ -1,27 +1,26 @@
-package com.github.project2.dto.post;
-
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "ProductCategory")
-public class ProductCategoryDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-}
+//package com.github.project2.dto.post;
+//
+//import jakarta.persistence.*;
+//import lombok.AllArgsConstructor;
+//import lombok.Getter;
+//import lombok.NoArgsConstructor;
+//import lombok.Setter;
+//
+//import java.math.BigDecimal;
+//import java.time.LocalDate;
+//import java.time.LocalDateTime;
+//import java.util.List;
+//
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
+//public class ProductCategoryDto {
+//    private Integer id;
+//    private List<String> imageUrls;
+//    private String name;
+//    private BigDecimal price;
+//    private Integer stock;
+//    private LocalDate endDate;
+//    private String category;
+//}

@@ -6,10 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Repository
 public interface ProductAllRepository extends JpaRepository<ProductEntity, Integer> {
 
-    Page<ProductEntity> findProductEntityByStockAndEndDateAfter(int i, LocalDateTime now, Pageable pageable);
+    Page<ProductEntity> findProductEntityByStockGreaterThanAndEndDateAfter(int stock, LocalDate endDate, Pageable pageable);
 }

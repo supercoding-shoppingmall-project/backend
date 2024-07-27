@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class ProductService {
     public List<ProductAllDto> getProductAlls(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
 
-        Page<ProductEntity> products = productAllRepository.findProductEntityByStockAndEndDateAfter(0, LocalDateTime.now(), pageable);
+        Page<ProductEntity> products = productAllRepository.findProductEntityByStockGreaterThanAndEndDateAfter(0, LocalDate.now(), pageable);
 
         return products.getContent().stream().map(this::convertToProductAllDto).collect(Collectors.toList());
     }

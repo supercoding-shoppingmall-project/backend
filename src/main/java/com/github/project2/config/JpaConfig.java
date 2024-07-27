@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = {"com.github.project2.repository.user","com.github.project2.entity.post"},
+        basePackages = {"com.github.project2.repository.user","com.github.project2.repository.post"},
         entityManagerFactoryRef = "entityManagerFactoryBean1"
 )
 public class JpaConfig {

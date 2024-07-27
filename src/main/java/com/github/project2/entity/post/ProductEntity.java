@@ -56,8 +56,8 @@ public class ProductEntity {
     private LocalDate endDate;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createAt;
+    private LocalDate createAt;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
     private List<ProductImageEntity> images;    // @@@@@
 }
