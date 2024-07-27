@@ -1,6 +1,9 @@
 package com.github.project2.filter;
 
 import com.github.project2.config.security.JwtTokenProvider;
+import com.github.project2.repository.user.BlacklistTokenRepository;
+import com.github.project2.service.exceptions.InvalidValueException;
+import com.github.project2.service.exceptions.NotAcceptException;
 import com.github.project2.service.user.UserService;
 import jakarta.persistence.Column;
 import jakarta.servlet.FilterChain;
@@ -8,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +22,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.NotActiveException;
 import java.net.Authenticator;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -29,27 +35,59 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 회원가입, 로그인 요청 filter 통과
         String requestURI = request.getRequestURI();
-        if ("/api/user/login".equals(requestURI) || "/api/user/signup".equals(requestURI) || "/api/product/all".equals(requestURI)) {   // 추가
+        log.info("Request URI: " + requestURI);
+
+        // 회원가입, 로그인, 물품 조회 요청 필터 통과
+        if ("/api/user/login".equals(requestURI) || "/api/user/signup".equals(requestURI) || "/api/product/all".equals(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        // token 검사
         String jwtToken = jwtTokenProvider.resolveToken(request);
-        String email = jwtTokenProvider.extractUserEmail(jwtToken);
+        if (jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            String email = jwtTokenProvider.extractUserEmail(jwtToken);
+            log.info("Extracted Email: " + email);
 
-        if (email != null && jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.loadUserByUsername(email);
+            if (email != null) {
+                UserDetails userDetails = userService.loadUserByUsername(email);
+                log.info("User Details: " + userDetails);
 
-            if (jwtTokenProvider.validateToken(jwtToken)){
-                // 토큰이 유효한 경우 인증 객체 설정
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                if (jwtTokenProvider.validateToken(jwtToken)) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.info("인증 성공");
+
+                    // 로그아웃 요청 처리
+                    if ("/api/user/logout".equals(requestURI) && "POST".equals(request.getMethod())) {
+                        handleLogout(request, response, jwtToken);
+                        return;
+                    }
+                } else {
+                    log.info("Invalid token");
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "잘못된 token입니다.");
+                    return;
+                }
             }
         }
+
         filterChain.doFilter(request, response);
+    }
+
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response, String jwtToken) throws IOException {
+        response.setContentType("application/json; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        if (userService.isTokenBlacklisted(jwtToken)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("이미 존재하는 blacklist token입니다.");
+        } else {
+            userService.blacklistToken(jwtToken);
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("로그아웃이 정상적으로 완료됐습니다.");
+        }
     }
 }
