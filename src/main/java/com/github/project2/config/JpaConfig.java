@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = {"com.github.project2.repository.user"},
+        basePackages = {"com.github.project2.repository.user","com.github.project2.repository.post"},
         entityManagerFactoryRef = "entityManagerFactoryBean1"
 )
 public class JpaConfig {
@@ -31,7 +31,7 @@ public class JpaConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean1(@Qualifier("dataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("com.github.project2.entity.user", "com.github.project2.entity.user.enums"
+        em.setPackagesToScan("com.github.project2.entity.user", "com.github.project2.entity.user.enums", "com.github.project2.entity.post"
         );
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
