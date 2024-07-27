@@ -16,22 +16,22 @@ public class ExceptionControllerAdvice {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public String handleNotFoundException(NotFoundException nfe) {
+    public ResponseEntity<String> handleNotFoundException(NotFoundException nfe) {
         log.error("Client 요청 이후 DB 검색 중 에러로 다음처럼 줄력합니다. " + nfe.getMessage());
-        return nfe.getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(nfe.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(NotAcceptException.class)
-    public String handleNotAcceptException(NotAcceptException nae) {
+    public ResponseEntity<String> handleNotAcceptException(NotAcceptException nae) {
         log.error("Client 요청이 거부됩니다." + nae.getMessage());
-        return nae.getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(nae.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidValueException.class)
-    public String handleInvalidValueException(InvalidValueException ive) {
+    public ResponseEntity<String> handleInvalidValueException(InvalidValueException ive) {
         log.error("Client 요청에 문제가 있어 다음처럼 출력합니다. " + ive.getMessage());
-        return ive.getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ive.getMessage());
     }
 }

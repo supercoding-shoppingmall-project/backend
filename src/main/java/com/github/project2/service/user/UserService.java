@@ -3,11 +3,15 @@ package com.github.project2.service.user;
 import com.github.project2.config.security.JwtTokenProvider;
 import com.github.project2.dto.user.LoginRequest;
 import com.github.project2.dto.user.UserBody;
+import com.github.project2.entity.user.BlackListTokenEntity;
 import com.github.project2.entity.user.UserEntity;
 import com.github.project2.entity.user.enums.Gender;
+import com.github.project2.repository.user.BlacklistTokenRepository;
 import com.github.project2.repository.user.UserRepository;
 import com.github.project2.service.exceptions.InvalidValueException;
+import com.github.project2.service.exceptions.NotAcceptException;
 import com.github.project2.service.exceptions.NotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -25,6 +29,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BlacklistTokenRepository blacklistTokenRepository;
 
     public void signup(UserBody userBody) {
         UserEntity foundedUser = userRepository.findUserByEmail(userBody.getEmail());
@@ -62,5 +67,19 @@ public class UserService implements UserDetailsService {
         }
         // UserDetails 객체를 생성하여 반환
         return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(), new ArrayList<>());
+    }
+
+    public boolean isTokenBlacklisted(String token) {
+        Optional<BlackListTokenEntity> blackListTokenEntity = blacklistTokenRepository.findByToken(token);
+        return blackListTokenEntity.isPresent();
+    }
+    
+    public void blacklistToken(String jwtToken) {
+        if (isTokenBlacklisted(jwtToken)) {
+            throw new InvalidValueException("이미 존재하는 토큰입니다.");
+        }
+        BlackListTokenEntity blackListTokenEntity = new BlackListTokenEntity();
+        blackListTokenEntity.setToken(jwtToken);
+        blacklistTokenRepository.save(blackListTokenEntity);
     }
 }

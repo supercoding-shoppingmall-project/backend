@@ -11,11 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -42,5 +40,15 @@ public class UserController {
         log.info(token);
         httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
         return ResponseEntity.ok("로그인이 성공적으로 완료되었습니다.");
+    }
+
+    @Tag(name = "post", description = "로그아웃 API")
+    @Operation(summary = "Http Headers 의 AUTHORIZATION 값을 받아 로그아웃")
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        String jwtToken = token.replace("Bearer ", "");
+        userService.blacklistToken(jwtToken);
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("로그아웃 필터가 처리합니다.");
+        return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 }

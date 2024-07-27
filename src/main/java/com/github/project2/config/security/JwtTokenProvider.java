@@ -35,7 +35,7 @@ public class JwtTokenProvider {
     private long tokenValidMillisecond = 1000L * 60 * 60;; // 1시간
 
     public String extractUserEmail(String token) {
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
 
@@ -63,7 +63,7 @@ public class JwtTokenProvider {
     // token 유효성 검증
     public Boolean validateToken(String token) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).getBody();
+            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
             Date now = new Date();
             return claims.getExpiration().before(now); // 만료시간이 현재 시간 이전인지 여부 확인
         } catch (Exception e){
