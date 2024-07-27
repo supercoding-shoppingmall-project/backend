@@ -65,7 +65,7 @@ public class JwtTokenProvider {
         try {
             Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
             Date now = new Date();
-            return claims.getExpiration().before(now); // 만료시간이 현재 시간 이전인지 여부 확인
+            return !claims.getExpiration().before(now); // 만료시간이 현재 시간 이전인지 여부 확인
         } catch (Exception e){
             return false;
         }

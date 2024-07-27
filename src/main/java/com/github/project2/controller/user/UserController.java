@@ -48,7 +48,6 @@ public class UserController {
     public ResponseEntity<String> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         String jwtToken = token.replace("Bearer ", "");
         userService.blacklistToken(jwtToken);
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("로그아웃 필터가 처리합니다.");
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 }

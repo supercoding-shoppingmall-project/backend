@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
         if (foundedUser == null) {
             throw new NotFoundException("사용자를 찾을 수 없습니다.");
         }
-        if (!foundedUser.getPassword().equals(loginRequest.getPassword()) ) { // 암호화된 비밀번호 비교
+        if (!foundedUser.getPassword().equals(loginRequest.getPassword()) ) { // 비밀번호 비교
             throw new InvalidValueException("비밀번호가 다릅니다.");
         }
         // token 생성
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
     
     public void blacklistToken(String jwtToken) {
         if (isTokenBlacklisted(jwtToken)) {
-            throw new InvalidValueException("이미 존재하는 토큰입니다.");
+            return;
         }
         BlackListTokenEntity blackListTokenEntity = new BlackListTokenEntity();
         blackListTokenEntity.setToken(jwtToken);

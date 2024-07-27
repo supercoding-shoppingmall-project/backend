@@ -34,13 +34,13 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-//                        .anyRequest().permitAll());
-                        .requestMatchers(
-                                "/api/user/login",
-                                "/api/user/signup",
-                                "/api/user/logout").permitAll() // 요청 허용
-                        .anyRequest().authenticated() // 나머지 요청 인증 필요
-                )
+                        .anyRequest().permitAll())
+//                        .requestMatchers(
+//                                "/api/user/login",
+//                                "/api/user/signup",
+//                                "/api/user/logout").permitAll() // 요청 허용
+//                        .anyRequest().authenticated() // 나머지 요청 인증 필요
+//                )
                         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
