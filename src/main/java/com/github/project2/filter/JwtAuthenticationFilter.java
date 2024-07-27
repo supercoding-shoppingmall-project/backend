@@ -31,8 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 회원가입, 로그인 요청 filter 통과
         String requestURI = request.getRequestURI();
-        if ("/api/user/login".equals(requestURI) || "/api/user/signup".equals(requestURI) || requestURI.startsWith("/api/product/all") ||
-                requestURI.startsWith("/api/product/category")) {   // 추가
+        if ("/api/user/login".equals(requestURI) || "/api/user/signup".equals(requestURI) || "/api/product/all".equals(requestURI) || requestURI.startsWith("/api/product/category")) {   // 추가
             filterChain.doFilter(request, response);
             return;
         }
