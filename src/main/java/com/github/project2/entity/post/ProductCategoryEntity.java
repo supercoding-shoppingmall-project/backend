@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class ProductCategoryEntity {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Integer categoryId;
 
     @Column(name = "name", nullable = false)
     private String name;
