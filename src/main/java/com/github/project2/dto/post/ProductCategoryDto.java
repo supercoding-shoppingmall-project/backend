@@ -22,7 +22,7 @@ public class ProductCategoryDto {
     private Integer category_id;
     private String name;
     private BigDecimal price;
-    private Integer stock;
+    private Integer totalStock;
     private LocalDate endDate;
     private String category;
 }

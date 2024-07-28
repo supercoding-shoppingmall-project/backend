@@ -1,11 +1,13 @@
 package com.github.project2.controller.post;
 
 
+import com.github.project2.dto.post.HeaderDto;
 import com.github.project2.dto.post.ProductAllDto;
 import com.github.project2.dto.post.ProductCategoryDto;
+import com.github.project2.dto.post.ProductDetailDto;
+import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.service.post.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +30,24 @@ public class ProductController {
 
     @GetMapping("/category/{category}")
     public ResponseEntity<List<ProductCategoryDto>> getProductCategorys(
-            @PathVariable String category,
+            @PathVariable Integer category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int pageSize){
         List<ProductCategoryDto> productCategory = productService.getProductCategorys(category, page, pageSize);
         return ResponseEntity.ok(productCategory);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<ProductDetailDto>> getProductDetails(
+            @PathVariable Integer id){
+        List<ProductDetailDto> productDetail = productService.getProductDetails(id);
+        return ResponseEntity.ok(productDetail);
+    }
+
+    @GetMapping("/header/{category}")
+    public ResponseEntity<List<HeaderDto>> getHeaderInfo(
+            @PathVariable Integer category){
+        List<HeaderDto> headers = productService.getHeaderInfo(category);
+        return ResponseEntity.ok(headers);
     }
 }
