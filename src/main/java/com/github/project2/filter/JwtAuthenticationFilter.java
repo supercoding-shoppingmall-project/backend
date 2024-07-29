@@ -39,7 +39,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("Request URI: " + requestURI);
 
         // 회원가입, 로그인, 물품 조회 요청 필터 통과
-        if ("/api/user/login".equals(requestURI) || "/api/user/signup".equals(requestURI) || "/api/product/all".equals(requestURI) || requestURI.startsWith("/api/product/category")) {
+        if ("/api/user/login".equals(requestURI)
+                || "/api/user/signup".equals(requestURI)
+                || "/api/product/all".equals(requestURI)
+                || "/api/cart/*".equals(requestURI)
+                || "/api/checkout".equals(requestURI)
+                || requestURI.startsWith("/api/product/category")) {
             filterChain.doFilter(request, response);
             return;
         }
