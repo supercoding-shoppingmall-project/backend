@@ -1,4 +1,4 @@
-package com.github.project2.dto.post;
+package com.github.project2.dto.cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,18 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductAllDto {
+public class CartItemDto {
     private Integer id;
-    private List<String> imageUrls;
-    private String name;
+    private String productName;
+    private String category;
+    private String size;
+    private Integer quantity;
     private BigDecimal price;
-    private Integer totalStock;
-    private LocalDate endDate;
+    private String shippingAddress;
+
 }

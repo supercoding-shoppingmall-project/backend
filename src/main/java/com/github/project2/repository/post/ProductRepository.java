@@ -8,11 +8,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
 
-    Page<ProductEntity> findProductEntityByStockGreaterThanAndEndDateAfter(int stock, LocalDate endDate, Pageable pageable);
+    Page<ProductEntity> findProductEntityByTotalStockGreaterThanAndEndDateAfter(int totalStock, LocalDate endDate, Pageable pageable);
 
-    Page<ProductEntity> findProductCategoryEntityByStockGreaterThanAndEndDateAfterAndCategoryName(int stock, LocalDate endDate, String categoryName, Pageable pageable);
+    Page<ProductEntity> findProductCategoryEntityByEndDateAfterAndCategoryId_CategoryId(LocalDate endDate, Integer categoryId, Pageable pageable);
+
+    List<ProductEntity> findByProductId(Integer id);
+
+    List<ProductEntity> findByCategoryId_CategoryId(Integer categoryId);
 }
