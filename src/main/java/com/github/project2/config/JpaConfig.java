@@ -31,7 +31,7 @@ public class JpaConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean1(@Qualifier("dataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("com.github.project2.entity.user", "com.github.project2.entity.user.enums", "com.github.project2.entity.post"
+        em.setPackagesToScan("com.github.project2.entity.user", "com.github.project2.entity.user.enums", "com.github.project2.entity.post", "com.github.project2.entity.cart"
         );
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
