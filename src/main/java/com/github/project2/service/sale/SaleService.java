@@ -3,6 +3,8 @@ package com.github.project2.service.sale;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.github.project2.config.S3Config;
+import com.github.project2.dto.sale.CategoryDto;
+import com.github.project2.dto.sale.ProductGetDto;
 import com.github.project2.dto.sale.ProductSaveDto;
 import com.github.project2.dto.sale.StockDto;
 import com.github.project2.entity.category.CategoryEntity;
@@ -21,13 +23,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
-import org.webjars.NotFoundException;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class SaleService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private String localLocation = "C:\\Users\\jk059\\OneDrive\\바탕 화면\\shoe";
+    private String localLocation = "";
 
 
     public String imageUpload(MultipartFile file) throws IOException {
@@ -114,6 +116,41 @@ public class SaleService {
 
         return productEntity;
     }
+
+    public List<ProductGetDto> getProductsBySellerEmail(String email) {
+
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("판매자 email을 찾을 수 없습니다"));
+
+
+        List<ProductEntity> products = productRepository.findByUserEmail(email);
+
+
+        return products.stream().map(product -> {
+
+            CategoryDto categoryDto = new CategoryDto(
+                    product.getCategoryEntity().getId(),
+                    product.getCategoryEntity().getCategoryName()
+            );
+            List<ProductImageEntity> productImages = productImageRepository.findByProduct(product);
+            List<String> imageUrls = productImages.stream().map(ProductImageEntity::getImageurl).collect(Collectors.toList());
+
+            // 재고 정보 가져오기
+            List<StockDto> stockDtos = productSizeRepository.findByProductId(product).stream()
+                    .map(sizeEntity -> new StockDto(sizeEntity.getSize(), sizeEntity.getSizeStock()))
+                    .collect(Collectors.toList());
+
+            return new ProductGetDto(
+                    product.getProductName(),
+                    product.getProductPrice(),
+                    product.getEndtime(),
+                    categoryDto,
+                    stockDtos,
+                    imageUrls
+            );
+        }).collect(Collectors.toList());
+    }
+
 
 
 

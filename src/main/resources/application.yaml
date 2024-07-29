@@ -12,5 +12,18 @@ logging:
       hibernate:
         SQL: DEBUG
 
+
+#aws
+cloud:
+  aws:
+    credentials:
+      secret-key: ${AWS_secret_KEY_ID}
+      access-key: ${AWS_ACCESS_KEY_ID}
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: myawsbucketteam
+
+
 jwt:
   secret-key-source: ${JWT_SECRET_KEY}

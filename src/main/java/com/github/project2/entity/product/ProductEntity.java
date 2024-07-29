@@ -34,8 +34,8 @@ public class ProductEntity {
     private String productDescription;
 
 
-    @Column(name = "views", length = 100)
-    private Integer views;
+//    @Column(name = "views", length = 100)
+//    private Integer views;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

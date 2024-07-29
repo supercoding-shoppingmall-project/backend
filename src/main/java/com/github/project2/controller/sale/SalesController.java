@@ -3,6 +3,7 @@ package com.github.project2.controller.sale;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.github.project2.dto.sale.ProductGetDto;
 import com.github.project2.dto.sale.ProductSaveDto;
 import com.github.project2.entity.product.ProductEntity;
 import com.github.project2.service.sale.SaleService;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/sell")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class SalesController {
     @Autowired
@@ -28,7 +29,7 @@ public class SalesController {
 
 
     //판매자 상품 등록
-    @PostMapping(value = "/save", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/sell/save", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> createProduct(
             @RequestPart("product") String productJson,
             @RequestPart("images") List<MultipartFile> images) throws IOException {
@@ -45,10 +46,10 @@ public class SalesController {
     }
 
     //판매자 상품 조회
-    @GetMapping("/seller")
-    public ResponseEntity<List<ProductEntity>> getProductsBySellerEmail(@RequestParam String email) {
-        List<ProductEntity> products = saleService.getProductsBySellerEmail(email);
-        return ResponseEntity.ok(products);
+    @GetMapping("/sell/{email}")
+    public ResponseEntity<List<ProductGetDto>> getProductsBySellerEmail(@PathVariable String email) {
+        List<ProductGetDto> productGetDtos = saleService.getProductsBySellerEmail(email);
+        return ResponseEntity.ok(productGetDtos);
     }
 
 
