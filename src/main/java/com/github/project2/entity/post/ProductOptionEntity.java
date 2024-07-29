@@ -21,8 +21,9 @@ public class ProductOptionEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "product_id")
-    private Integer productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private ProductEntity productId;
 
     @Column(name = "name", nullable = false)
     private String name;

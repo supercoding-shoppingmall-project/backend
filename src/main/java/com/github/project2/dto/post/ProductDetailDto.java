@@ -13,11 +13,16 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductAllDto {
+public class ProductDetailDto {
     private Integer id;
     private List<String> imageUrls;
+    private String category;
     private String name;
     private BigDecimal price;
-    private Integer totalStock;
+    private List<Integer> size;
+    private List<Integer> sizeStock;
+    private String description;
     private LocalDate endDate;
+    private Integer views;  // 리뷰 대체
+    private Integer sales;  // 평점 대체 (Double 할것)
 }
