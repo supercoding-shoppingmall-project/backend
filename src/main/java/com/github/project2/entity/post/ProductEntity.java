@@ -35,23 +35,18 @@ public class ProductEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "size", length = 20)
-    private String size;    // 안쓸거
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "stock", nullable = false)
-    private Integer stock;
-    // 리뷰로 대체
-    @Column(name = "views", columnDefinition = "INT DEFAULT 0")
-    private Integer views;
-    // 평점으로 대체
-    @Column(name = "sales", columnDefinition = "INT DEFAULT 0")
-    private Integer sales;
+    // views -> 리뷰로 대체
+    @Column(name = "review", columnDefinition = "INT DEFAULT 0")
+    private Integer review;
+    // sales -> 평점으로 대체
+    @Column(name = "grade", columnDefinition = "INT DEFAULT 0")
+    private Double grade;
 
     @Column(name = "end_date")
     private LocalDate endDate;
@@ -59,12 +54,16 @@ public class ProductEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDate createAt;
 
+    @Formula("(select sum(ps.size_stock) from ProductSize ps where ps.product_id = id)")
+    private Integer totalStock;         // 추가
+
     @OneToMany(mappedBy = "ProductId", fetch = FetchType.LAZY)
     private List<ProductSizeEntity> sizeId;
 
     @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
     private List<ProductImageEntity> images;    // @@@@@
 
-    @Formula("(select sum(ps.size_stock) from ProductSize ps where ps.product_id = id)")
-    private Integer totalStock;
+    @OneToMany(mappedBy = "ProductId", fetch = FetchType.LAZY)
+    private List<ProductDescriptionEntity> descriptionId;
+
 }

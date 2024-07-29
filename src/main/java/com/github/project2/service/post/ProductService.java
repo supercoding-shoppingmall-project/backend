@@ -4,8 +4,11 @@ import com.github.project2.dto.post.HeaderDto;
 import com.github.project2.dto.post.ProductAllDto;
 import com.github.project2.dto.post.ProductCategoryDto;
 import com.github.project2.dto.post.ProductDetailDto;
+import com.github.project2.entity.post.ProductCategoryEntity;
+import com.github.project2.entity.post.ProductDescriptionEntity;
 import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.entity.post.ProductSizeEntity;
+import com.github.project2.entity.user.UserEntity;
 import com.github.project2.repository.post.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,6 +37,7 @@ public class ProductService {
     private ProductAllDto convertToProductAllDto(ProductEntity productEntity) {
         return new ProductAllDto(
                 productEntity.getProductId(),
+                productEntity.getSellerId().getEmail(),
                 productEntity.getImages().stream().map(image -> image.getImageUrl()).collect(Collectors.toList()),
                 productEntity.getName(),
                 productEntity.getPrice(),
@@ -52,6 +56,7 @@ public class ProductService {
     private ProductCategoryDto convertToProductCategoryDto(ProductEntity productEntity){
         return new ProductCategoryDto(
                 productEntity.getProductId(),
+                productEntity.getSellerId().getEmail(),
                 productEntity.getImages().stream().map(image -> image.getImageUrl()).collect(Collectors.toList()),
                 productEntity.getCategoryId().getCategoryId(),
                 productEntity.getName(),
@@ -70,16 +75,17 @@ public class ProductService {
     private ProductDetailDto convertToProductDetailDto(ProductEntity productEntity){
         return new ProductDetailDto(
                 productEntity.getProductId(),
+                productEntity.getSellerId().getEmail(),
                 productEntity.getImages().stream().map(image -> image.getImageUrl()).collect(Collectors.toList()),
                 productEntity.getCategoryId().getName(),
                 productEntity.getName(),
                 productEntity.getPrice(),
                 productEntity.getSizeId().stream().map(ProductSizeEntity::getSize).collect(Collectors.toList()),
                 productEntity.getSizeId().stream().map(ProductSizeEntity::getSizeStock).collect(Collectors.toList()),
-                productEntity.getDescription(),
+                productEntity.getDescriptionId().stream().map(ProductDescriptionEntity::getDescription).collect(Collectors.toList()),
                 productEntity.getEndDate(),
-                productEntity.getViews(),
-                productEntity.getSales()
+                productEntity.getReview(),
+                productEntity.getGrade()
         );
     }
 

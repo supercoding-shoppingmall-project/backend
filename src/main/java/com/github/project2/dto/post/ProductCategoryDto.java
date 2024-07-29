@@ -18,11 +18,12 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductCategoryDto {
     private Integer id;
+    private String sellerEmail;
     private List<String> imageUrls;
     private Integer category_id;
     private String name;
     private BigDecimal price;
     private Integer totalStock;
     private LocalDate endDate;
-    private String category;
+    private String categoryName;
 }
