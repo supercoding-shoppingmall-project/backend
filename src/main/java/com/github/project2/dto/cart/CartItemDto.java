@@ -19,4 +19,5 @@ public class CartItemDto {
     private Integer quantity;
     private BigDecimal price;
     private String shippingAddress;
+
 }
