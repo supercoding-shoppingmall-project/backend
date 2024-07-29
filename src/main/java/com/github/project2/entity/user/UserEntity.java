@@ -1,5 +1,7 @@
 package com.github.project2.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.github.project2.entity.product.ProductEntity;
 import com.github.project2.dto.user.UserBody;
 import com.github.project2.entity.user.enums.Gender;
 import com.github.project2.entity.user.enums.Role;
@@ -53,6 +55,10 @@ public class UserEntity {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,orphanRemoval = true,fetch = FetchType.LAZY)
+
+    private List<ProductEntity> productEntityList;
 
     @PrePersist
     protected void onCreate() {
