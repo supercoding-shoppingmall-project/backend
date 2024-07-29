@@ -6,6 +6,7 @@ import com.github.project2.dto.user.UserBody;
 import com.github.project2.entity.user.BlackListTokenEntity;
 import com.github.project2.entity.user.UserEntity;
 import com.github.project2.entity.user.enums.Gender;
+import com.github.project2.entity.user.enums.Status;
 import com.github.project2.repository.user.BlacklistTokenRepository;
 import com.github.project2.repository.user.UserRepository;
 import com.github.project2.service.exceptions.InvalidValueException;
@@ -25,7 +26,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService implements UserDetailsService {
+public class UserService  {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
@@ -54,19 +55,12 @@ public class UserService implements UserDetailsService {
         if (!foundedUser.getPassword().equals(loginRequest.getPassword()) ) { // 비밀번호 비교
             throw new InvalidValueException("비밀번호가 다릅니다.");
         }
+        if (foundedUser.getStatus() == Status.DELETE) {
+            throw new InvalidValueException("삭제된 회원으로 로그인 할 수 없습니다.");
+        }
         // token 생성
         String token = jwtTokenProvider.generateToken(loginRequest.getEmail());
         return token;
-    }
-
-
-    public UserDetails loadUserByUsername(String email) {
-        UserEntity userEntity = userRepository.findUserByEmail(email);
-        if (userEntity == null) {
-            throw new NotFoundException("사용자를 찾을 수 없습니다.");
-        }
-        // UserDetails 객체를 생성하여 반환
-        return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(), new ArrayList<>());
     }
 
     public boolean isTokenBlacklisted(String token) {
@@ -81,5 +75,17 @@ public class UserService implements UserDetailsService {
         BlackListTokenEntity blackListTokenEntity = new BlackListTokenEntity();
         blackListTokenEntity.setToken(jwtToken);
         blacklistTokenRepository.save(blackListTokenEntity);
+    }
+
+    public void deleteUser(String email, String password) {
+        UserEntity foundedUser = userRepository.findUserByEmail(email);
+        if (foundedUser == null) {
+            throw new NotFoundException("사용자를 찾을 수 없습니다.");
+        }
+        if (!foundedUser.getPassword().equals(password) ) { // 비밀번호 비교
+            throw new InvalidValueException("비밀번호가 다릅니다.");
+        }
+        foundedUser.setStatus(Status.DELETE);
+        userRepository.save(foundedUser);
     }
 }

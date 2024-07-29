@@ -44,14 +44,26 @@ public class UserEntity {
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Status status;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;    // 생성일자
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
+    @PrePersist
+    protected void onCreate() {
+        if (this.role == null) {
+            this.role = Role.USER;
+        }
+        if (this.status == null) {
+            this.status = Status.ACTIVE;
+        }
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
 }
