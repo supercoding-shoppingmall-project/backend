@@ -64,7 +64,7 @@ public class CartService {
         return new CartItemDto(
                 cartItem.getId(),
                 cartItem.getProduct().getName(),
-                cartItem.getProduct().getCategory().getName(),
+                cartItem.getProductCategory().getName(),
                 cartItem.getSize(),
                 cartItem.getQuantity(),
                 cartItem.getProduct().getPrice(),
