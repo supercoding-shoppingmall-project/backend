@@ -98,10 +98,10 @@ public class SaleService {
 
         // 설명 저장
         for (ProductDescriptionDto productDescriptionDto : productSaveDto.getDescriptions()){
-            ProductDescritptionEntity productDescritptionEntity = new ProductDescritptionEntity();
-            productDescritptionEntity.setProduct(productEntity);
-            productDescritptionEntity.setDescription(productDescriptionDto.getDescription());
-            productDescriptionRepository.save(productDescritptionEntity);
+            ProductDescriptionEntity productDescriptionEntity = new ProductDescriptionEntity();
+            productDescriptionEntity.setProduct(productEntity);
+            productDescriptionEntity.setDescription(productDescriptionDto.getDescription());
+            productDescriptionRepository.save(productDescriptionEntity);
         }
 
         // 이미지 정보 저장
