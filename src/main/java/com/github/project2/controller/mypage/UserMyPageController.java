@@ -25,8 +25,8 @@ public class UserMyPageController {
 	}
 
 	@PostMapping("/profile-image/{userId}")
-	public ResponseEntity<UserMyPageProfileImageResponse> createUserProfileImage(@PathVariable Integer userId, @RequestBody UserMyPageProfileImageCreateRequest request) {
-		UserMyPageProfileImageResponse response = userMyPageService.createUserProfileImage(userId, request);
+	public ResponseEntity<UserMyPageProfileImageResponse> createAndUpdateUserProfileImage(@PathVariable Integer userId, @RequestBody UserMyPageProfileImageCreateRequest request) {
+		UserMyPageProfileImageResponse response = userMyPageService.createAndUpdateUserProfileImage(userId, request);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
