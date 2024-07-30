@@ -4,11 +4,9 @@ import com.github.project2.dto.post.HeaderDto;
 import com.github.project2.dto.post.ProductAllDto;
 import com.github.project2.dto.post.ProductCategoryDto;
 import com.github.project2.dto.post.ProductDetailDto;
-import com.github.project2.entity.post.ProductCategoryEntity;
 import com.github.project2.entity.post.ProductDescriptionEntity;
 import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.entity.post.ProductSizeEntity;
-import com.github.project2.entity.user.UserEntity;
 import com.github.project2.repository.post.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +35,7 @@ public class ProductService {
 
     private ProductAllDto convertToProductAllDto(ProductEntity productEntity) {
         return new ProductAllDto(
-                productEntity.getProductId(),
+                productEntity.getId(),
                 productEntity.getSellerId().getEmail(),
                 productEntity.getImages().stream().map(image -> image.getImageUrl()).collect(Collectors.toList()),
                 productEntity.getName(),
@@ -55,7 +54,7 @@ public class ProductService {
 
     private ProductCategoryDto convertToProductCategoryDto(ProductEntity productEntity){
         return new ProductCategoryDto(
-                productEntity.getProductId(),
+                productEntity.getId(),
                 productEntity.getSellerId().getEmail(),
                 productEntity.getImages().stream().map(image -> image.getImageUrl()).collect(Collectors.toList()),
                 productEntity.getCategoryId().getCategoryId(),
@@ -68,21 +67,21 @@ public class ProductService {
     }
 
     public List<ProductDetailDto> getProductDetails(Integer id) {
-        List<ProductEntity> productDetails = productRepository.findByProductId(id);
+        Optional<ProductEntity> productDetails = productRepository.findById(id);
         return productDetails.stream().map(this::convertToProductDetailDto).collect(Collectors.toList());
     }
 
     private ProductDetailDto convertToProductDetailDto(ProductEntity productEntity){
         return new ProductDetailDto(
-                productEntity.getProductId(),
+                productEntity.getId(),
                 productEntity.getSellerId().getEmail(),
                 productEntity.getImages().stream().map(image -> image.getImageUrl()).collect(Collectors.toList()),
                 productEntity.getCategoryId().getName(),
                 productEntity.getName(),
                 productEntity.getPrice(),
-                productEntity.getSizeId().stream().map(ProductSizeEntity::getSize).collect(Collectors.toList()),
-                productEntity.getSizeId().stream().map(ProductSizeEntity::getSizeStock).collect(Collectors.toList()),
-                productEntity.getDescriptionId().stream().map(ProductDescriptionEntity::getDescription).collect(Collectors.toList()),
+                productEntity.getSizes().stream().map(ProductSizeEntity::getSize).collect(Collectors.toList()),
+                productEntity.getSizes().stream().map(ProductSizeEntity::getSizeStock).collect(Collectors.toList()),
+                productEntity.getDescriptions().stream().map(ProductDescriptionEntity::getDescription).collect(Collectors.toList()),
                 productEntity.getEndDate(),
                 productEntity.getReview(),
                 productEntity.getGrade()
@@ -96,7 +95,7 @@ public class ProductService {
 
     private HeaderDto convertToHeaderDto(ProductEntity productEntity){
         return new HeaderDto(
-                productEntity.getProductId(),
+                productEntity.getId(),
                 productEntity.getCategoryId().getCategoryId()
         );
     }

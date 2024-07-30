@@ -19,7 +19,7 @@ public class ProductSizeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private ProductEntity ProductId;
+    private ProductEntity product;
 
     @Column(name = "size", nullable = false)
     private Integer size;

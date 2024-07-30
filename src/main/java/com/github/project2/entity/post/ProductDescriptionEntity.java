@@ -19,8 +19,10 @@ public class ProductDescriptionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private ProductEntity ProductId;
+    private ProductEntity product;
 
     @Column(name = "description", nullable = false)
     private String description;
+
+
 }
