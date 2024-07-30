@@ -46,10 +46,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || "/api/product/all".equals(requestURI)
                 || "/api/cart/*".equals(requestURI)
                 || "/api/checkout".equals(requestURI)
+                || "/api/sell".equals(requestURI)
                 || requestURI.startsWith("/api/cart")
                 || requestURI.startsWith("/api/product/category")
                 || requestURI.startsWith("/api/product")
                 || requestURI.startsWith("/api/product/header")){
+                || requestURI.startsWith("/api/sell")
+                || requestURI.startsWith("/api/product/category")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -75,6 +78,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     log.info("인증 성공");
+
                     // 로그아웃 요청 처리
                     if ("/api/user/logout".equals(requestURI) && "POST".equals(request.getMethod())) {
                         handleLogout(request, response, jwtToken);

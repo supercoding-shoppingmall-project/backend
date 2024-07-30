@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.project2.dto.sale.ProductGetDto;
 import com.github.project2.dto.sale.ProductSaveDto;
-import com.github.project2.entity.product.ProductEntity;
+
+import com.github.project2.dto.sale.StockDto;
+import com.github.project2.entity.post.ProductEntity;
+import com.github.project2.entity.post.ProductSizeEntity;
 import com.github.project2.service.sale.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import java.util.Map;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class SalesController {
+
     @Autowired
     private  SaleService saleService;
 
@@ -44,13 +48,25 @@ public class SalesController {
 
         return ResponseEntity.ok("상품 등록에 성공했습니다");
     }
-
     //판매자 상품 조회
     @GetMapping("/sell/{email}")
-    public ResponseEntity<List<ProductGetDto>> getProductsBySellerEmail(@PathVariable String email) {
-        List<ProductGetDto> productGetDtos = saleService.getProductsBySellerEmail(email);
-        return ResponseEntity.ok(productGetDtos);
+    public ResponseEntity<List<ProductGetDto>> getProductBySellerEmail(@PathVariable String email) {
+        List<ProductGetDto> products = saleService.getProductsBySellerEmail(email);
+        return ResponseEntity.ok(products);
     }
+
+    @PutMapping("/sell/update/{productName}")
+    public ResponseEntity<String> updateStock(
+            @PathVariable String productName,
+            @RequestBody StockDto stockDto) {
+
+        ProductSizeEntity updatedProductSize = saleService.updateStock(productName, stockDto);
+        return ResponseEntity.ok("재고 수정에성공했습니다.");
+    }
+
+
+
+
 
 
 }

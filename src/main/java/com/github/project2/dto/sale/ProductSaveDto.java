@@ -2,8 +2,9 @@ package com.github.project2.dto.sale;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.github.project2.entity.category.CategoryEntity;
 
+
+import com.github.project2.entity.post.ProductCategoryEntity;
 import lombok.*;
 
 
@@ -22,14 +23,13 @@ public class ProductSaveDto {
 
 
     private String seller;
-    private CategoryEntity category;
+    private String category;
     private String productName;
     private BigDecimal productPrice;
-    private String productDescription;
-    private Integer totalstock;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime endtime;
-    private List<StockDto> stockDtos; //판매종료날짜
+    private List<ProductDescriptionDto>  descriptions;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endtime;
+    private List<StockDto> stockDtos;
 }
