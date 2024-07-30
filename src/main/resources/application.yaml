@@ -25,5 +25,6 @@ cloud:
       bucket: myawsbucketteam
 
 
+
 jwt:
   secret-key-source: ${JWT_SECRET_KEY}
