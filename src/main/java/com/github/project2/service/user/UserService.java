@@ -85,6 +85,9 @@ public class UserService  {
         if (!foundedUser.getPassword().equals(password) ) { // 비밀번호 비교
             throw new InvalidValueException("비밀번호가 다릅니다.");
         }
+        if (foundedUser.getStatus() == Status.DELETE) {
+            throw new NotAcceptException("이미 삭제 된 회원입니다.");
+        }
         foundedUser.setStatus(Status.DELETE);
         userRepository.save(foundedUser);
     }
