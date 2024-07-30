@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: "jdbc:mariadb://database-1.cpeoyq8kyjgq.ap-northeast-2.rds.amazonaws.com:3306/project2"
-    username: root
-    password: spmariadbpw
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
 logging:
   config: classpath:logback-spring.xml
@@ -13,4 +13,4 @@ logging:
         SQL: DEBUG
 
 jwt:
-  secret-key-source: 1j2j4b25b23jk512jk1j6hj78h7j8j45j3j2k2k2k13k341k45jj67j89j89jk5k3k34232bh2hklsdf
+  secret-key-source: ${JWT_SECRET_KEY}
