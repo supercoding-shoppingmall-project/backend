@@ -5,7 +5,6 @@ import com.github.project2.dto.mypage.*;
 import com.github.project2.entity.mypage.UserMyPageProfileImage;
 import com.github.project2.entity.user.UserEntity;
 import com.github.project2.entity.user.enums.Gender;
-import com.github.project2.mapper.UserMyPageMapper;
 import com.github.project2.repository.mypage.UserMyPageProfileImageRepository;
 import com.github.project2.repository.mypage.UserMyPageRepository;
 import com.github.project2.service.exceptions.NotFoundException;
@@ -22,12 +21,11 @@ public class UserMyPageService {
 	private final UserMyPageRepository userMyPageRepository;
 	private final UserMyPageProfileImageRepository userMyPageProfileImageRepository;
 
-	private final UserMyPageMapper userMyPageMapper;
-
+	// 사용자 정보를 ID로 조회하여 반환하는 메서드
 	public UserMyPageResponse getUserById(Integer id) {
 		UserEntity user = userMyPageRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("User not found"));
-		return userMyPageMapper.toUserResponse(user);
+		return toUserMyPageResponse(user);
 	}
 
 	public UserMyPageResponse updateUser(Integer id, UserMyPageUpdateRequest userMyPageUpdateRequest) {
@@ -54,7 +52,7 @@ public class UserMyPageService {
 		return response;
 	}
 
-	public UserMyPageProfileImageResponse createUserProfileImage(Integer userId, UserMyPageProfileImageCreateRequest request) {
+	public UserMyPageProfileImageResponse createAndUpdateUserProfileImage(Integer userId, UserMyPageProfileImageCreateRequest request) {
 		UserEntity user = userMyPageRepository.findById(userId)
 				.orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -63,9 +61,10 @@ public class UserMyPageService {
 
 		if (existingProfileImage.isPresent()) {
 			// 존재하면 업데이트 수행
-			UserMyPageProfileImageUpdateRequest updateRequest = new UserMyPageProfileImageUpdateRequest();
-			updateRequest.setProfileImageUrl(request.getProfileImageUrl());
-			return updateUserProfileImage(existingProfileImage.get().getId(), updateRequest);
+			UserMyPageProfileImage userMyPageProfileImage = existingProfileImage.get();
+			userMyPageProfileImage.setProfileImageUrl(request.getProfileImageUrl());
+			userMyPageProfileImageRepository.save(userMyPageProfileImage);
+			return toUserMyPageProfileImageResponse(userMyPageProfileImage);
 		} else {
 			// 존재하지 않으면 새로 생성
 			UserMyPageProfileImage userMyPageProfileImage = new UserMyPageProfileImage();
@@ -102,12 +101,4 @@ public class UserMyPageService {
 		return response;
 	}
 
-
-	private UserMyPageProfileImageResponse toUserMyPageCreateProfileImageResponse(UserMyPageProfileImage userMyPageProfileImage) {
-		UserMyPageProfileImageResponse response = new UserMyPageProfileImageResponse();
-		response.setId(userMyPageProfileImage.getId());
-		response.setUserId(userMyPageProfileImage.getUser().getId());
-		response.setProfileImageUrl(userMyPageProfileImage.getProfileImageUrl());
-		return response;
-	}
 }
