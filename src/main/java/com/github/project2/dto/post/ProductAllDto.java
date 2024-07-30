@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductAllDto {
     private Integer id;
+    private String sellerEmail;
     private List<String> imageUrls;
     private String name;
     private BigDecimal price;
