@@ -60,7 +60,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:63342"));
+        configuration.setAllowedOrigins(List.of("https://sc-shoppingmall.netlify.app/"));
         configuration.setAllowCredentials(true); // token을 주고받을 때 필요
         configuration.addExposedHeader("Authorization"); // token
         configuration.addAllowedHeader("*");
