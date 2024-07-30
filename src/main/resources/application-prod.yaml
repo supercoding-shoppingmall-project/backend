@@ -1,22 +1,17 @@
 spring:
-  config:
-    activate:
-      on-profile: local
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
     url: "jdbc:mariadb://database-1.cpeoyq8kyjgq.ap-northeast-2.rds.amazonaws.com:3306/project2"
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-server:
-  port: 8080
+  config:
+    activate:
+      on-profile: prod
 
 
 logging:
-  config: classpath:logback-spring.xml
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
+  config: classpath:logback-spring-prod.xml
+
 
 jwt:
   secret-key-source: ${JWT_SECRET_KEY}
