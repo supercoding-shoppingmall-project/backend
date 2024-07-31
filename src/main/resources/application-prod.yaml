@@ -8,10 +8,19 @@ spring:
     activate:
       on-profile: prod
 
-
 logging:
   config: classpath:logback-spring-prod.xml
 
+#aws
+cloud:
+  aws:
+    credentials:
+      secret-key: ${cloud.aws.credentials.secret-key}
+      access-key: ${cloud.aws.credentials.access-key}
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: myawsbucketteam
 
 jwt:
   secret-key-source: ${JWT_SECRET_KEY}
