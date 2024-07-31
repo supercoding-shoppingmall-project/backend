@@ -1,6 +1,7 @@
 package com.github.project2.filter;
 
 import com.github.project2.config.security.JwtTokenProvider;
+import com.github.project2.entity.user.CustomUserDetails;
 import com.github.project2.repository.user.BlacklistTokenRepository;
 import com.github.project2.service.exceptions.InvalidValueException;
 import com.github.project2.service.exceptions.NotAcceptException;
@@ -32,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -44,8 +46,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || "/api/product/all".equals(requestURI)
                 || "/api/cart/*".equals(requestURI)
                 || "/api/checkout".equals(requestURI)
+                || "/api/sell".equals(requestURI)
                 || requestURI.startsWith("/api/cart")
-                || requestURI.startsWith("/api/product/category")) {
+                || requestURI.startsWith("/api/product/category")
+                || requestURI.startsWith("/api/product")
+                || requestURI.startsWith("/api/product/header")
+                || requestURI.startsWith("/api/sell")){
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,10 +62,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String email = jwtTokenProvider.extractUserEmail(jwtToken);
             log.info("Extracted Email: " + email);
 
-            if (email != null) {
-                UserDetails userDetails = userService.loadUserByUsername(email);
-                log.info("User Details: " + userDetails);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            log.info("User Details: " + userDetails );
 
+            if (userDetails instanceof CustomUserDetails) {
+                CustomUserDetails customUserDetail = (CustomUserDetails) userDetails;
+                log.info("User ID: " + customUserDetail.getId());
+                log.info("User Email: " + customUserDetail.getEmail());
+                log.info("User Password: " + customUserDetail.getPassword());
+            }
                 if (jwtTokenProvider.validateToken(jwtToken)) {
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -78,8 +89,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     return;
                 }
             }
-        }
-
         filterChain.doFilter(request, response);
     }
 

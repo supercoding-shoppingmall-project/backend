@@ -2,15 +2,11 @@ package com.github.project2.entity.post;
 
 import com.github.project2.entity.user.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,18 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "Product")
+@Builder
 public class ProductEntity {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer productId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id")
-    private UserEntity sellerId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private ProductCategoryEntity categoryId;
+    private Integer Id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -41,17 +30,11 @@ public class ProductEntity {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "size", length = 20)
-    private String size;    // 안쓸거
+    @Column(name = "review", columnDefinition = "INT DEFAULT 0")
+    private Integer review;
 
-    @Column(name = "stock", nullable = false)
-    private Integer stock;
-    // 리뷰로 대체
-    @Column(name = "views", columnDefinition = "INT DEFAULT 0")
-    private Integer views;
-    // 평점으로 대체
-    @Column(name = "sales", columnDefinition = "INT DEFAULT 0")
-    private Integer sales;
+    @Column(name = "grade", columnDefinition = "INT DEFAULT 0")
+    private Double grade;
 
     @Column(name = "end_date")
     private LocalDate endDate;
@@ -59,12 +42,23 @@ public class ProductEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDate createAt;
 
-    @OneToMany(mappedBy = "ProductId", fetch = FetchType.LAZY)
-    private List<ProductSizeEntity> sizeId;
-
-    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
-    private List<ProductImageEntity> images;    // @@@@@
-
     @Formula("(select sum(ps.size_stock) from ProductSize ps where ps.product_id = id)")
     private Integer totalStock;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductSizeEntity> sizes;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductDescriptionEntity> descriptions;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductImageEntity> images;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private UserEntity sellerId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private ProductCategoryEntity categoryId;
 }

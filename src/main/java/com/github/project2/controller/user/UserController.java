@@ -2,7 +2,9 @@ package com.github.project2.controller.user;
 
 import com.github.project2.dto.user.LoginRequest;
 import com.github.project2.dto.user.UserBody;
+import com.github.project2.entity.user.UserEntity;
 import com.github.project2.repository.user.UserRepository;
+import com.github.project2.service.user.AuthenticationFacade;
 import com.github.project2.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,6 +30,7 @@ public class UserController {
 
     private final UserService userService;
     private final HttpServletResponse httpServletResponse;
+    private final AuthenticationFacade authenticationFacade;
 
     @Tag(name = "post", description = "회원가입 API")
     @Operation(summary = "이메일로 회원가입")
@@ -49,5 +57,15 @@ public class UserController {
         String jwtToken = token.replace("Bearer ", "");
         userService.blacklistToken(jwtToken);
         return ResponseEntity.ok("로그아웃 되었습니다.");
+    }
+
+    @Tag(name = "post", description = "회원삭제 API")
+    @Operation(summary = "Parameter로 비밀번호를 받아 회원 삭제")
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String password = request.get("password");
+        userService.deleteUser(email, password);
+        return ResponseEntity.ok("회원 탈퇴 성공");
     }
 }

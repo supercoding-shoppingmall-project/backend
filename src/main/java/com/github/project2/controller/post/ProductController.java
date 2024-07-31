@@ -5,7 +5,6 @@ import com.github.project2.dto.post.HeaderDto;
 import com.github.project2.dto.post.ProductAllDto;
 import com.github.project2.dto.post.ProductCategoryDto;
 import com.github.project2.dto.post.ProductDetailDto;
-import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.service.post.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
