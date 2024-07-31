@@ -9,6 +9,4 @@ import java.util.List;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItemEntity, Integer> {
-    // 특정 사용자에 대한 모든 장바구니 항목 조회
-    List<CartItemEntity> findByUser(UserEntity user);
 }

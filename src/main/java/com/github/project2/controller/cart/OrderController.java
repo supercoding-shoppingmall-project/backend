@@ -1,6 +1,6 @@
 package com.github.project2.controller.cart;
 
-import com.github.project2.dto.cart.OrderRequestDto;
+import com.github.project2.dto.cart.CartItemRequest;
 import com.github.project2.service.cart.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class OrderController {
     // 주문 처리 요청
     @PostMapping
     public ResponseEntity<Void> checkout(@RequestParam String userEmail,
-                                         @RequestBody OrderRequestDto orderRequest) {
+                                         @RequestBody CartItemRequest.OrderRequestDto orderRequest) {
         orderService.checkout(userEmail, orderRequest);
         return ResponseEntity.ok().build();
     }

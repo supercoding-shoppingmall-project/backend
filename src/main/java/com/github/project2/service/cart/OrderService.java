@@ -1,6 +1,6 @@
 package com.github.project2.service.cart;
 
-import com.github.project2.dto.cart.OrderRequestDto;
+import com.github.project2.dto.cart.CartItemRequest;
 import com.github.project2.entity.cart.OrderEntity;
 import com.github.project2.entity.cart.OrderItemEntity;
 import com.github.project2.entity.post.ProductEntity;
@@ -27,7 +27,7 @@ public class OrderService {
 
     // 주문 처리
     @Transactional
-    public void checkout(String userEmail, OrderRequestDto orderRequest) {
+    public void checkout(String userEmail, CartItemRequest.OrderRequestDto orderRequest) {
         UserEntity user = userRepository.findUserByEmail(userEmail);
 
         // 총 주문 금액 계산
