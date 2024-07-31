@@ -23,8 +23,8 @@ logging:
 cloud:
   aws:
     credentials:
-      secret-key: ${cloud.aws.credentials.secret-key}
-      access-key: ${cloud.aws.credentials.access-key}
+      secret-key: ${CLOUD_AWS_CREDENTIALS_SECRET_KEY}
+      access-key: ${CLOUD_AWS_CREDENTIALS_ACCESS_KEY}
     region:
       static: ap-northeast-2
     s3:
