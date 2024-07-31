@@ -32,18 +32,15 @@ public class ProductEntity {
 
     @Column(name = "review", columnDefinition = "INT DEFAULT 0")
     private Integer review;
-    // sales -> 평점으로 대체
+
     @Column(name = "grade", columnDefinition = "INT DEFAULT 0")
     private Double grade;
-
-
-
 
     @Column(name = "end_date")
     private LocalDate endDate;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createAt;// @@@@@
+    private LocalDate createAt;
 
     @Formula("(select sum(ps.size_stock) from ProductSize ps where ps.product_id = id)")
     private Integer totalStock;
