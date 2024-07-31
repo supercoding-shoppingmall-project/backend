@@ -1,40 +1,49 @@
 package com.github.project2.entity.cart;
 
-import com.github.project2.entity.post.ProductCategoryEntity;
 import com.github.project2.entity.post.ProductEntity;
-import com.github.project2.entity.user.UserEntity;
+import com.github.project2.entity.post.ProductOptionEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name="CartItem") // 장바구니 항목 테이블 매핑
 public class CartItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 사용자와 N:1
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = false)
+    private CartEntity cart;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 상품과 N:1
-    @JoinColumn(name = "product_id")
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private ProductCategoryEntity productCategory;
-
-    @Column(name = "size", nullable = false, length = 20)
-    private String size;
+    @ManyToOne
+    @JoinColumn(name = "product_option_id", nullable = true)
+    private ProductOptionEntity productOption;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
+
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+
+//    @Column(name = "created_at", nullable = false, updatable = false)
+//    @Generated(GenerationTime.INSERT)
+//    private LocalDateTime createdAt = LocalDateTime.now();
 }
