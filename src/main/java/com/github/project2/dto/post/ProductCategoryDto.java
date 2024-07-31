@@ -9,11 +9,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCategoryDto {
+
     private Integer id;
     private String sellerEmail;
     private List<String> imageUrls;

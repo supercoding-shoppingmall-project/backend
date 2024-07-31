@@ -110,7 +110,7 @@ public class SaleService {
 
             ProductImageEntity productImageEntity = ProductImageEntity.builder()
                     .name(imageFile.getOriginalFilename())
-                    .imageurl(imageUrl)
+                    .imageUrl(imageUrl)
                     .product(productEntity)
                     .build();
 
@@ -143,11 +143,11 @@ public class SaleService {
                             .collect(Collectors.toList());
 
                     List<String> imageUrls = images.stream()
-                            .map(ProductImageEntity::getImageurl)
+                            .map(ProductImageEntity::getImageUrl)
                             .collect(Collectors.toList());
 
                     return new ProductGetDto(
-                            product.getCategoryId().getName(), // 카테고리 이름
+                            product.getCategoryId().getName(),
                             product.getName(),
                             product.getPrice(),
                             product.getEndDate(),
