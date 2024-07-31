@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name = "CartItem") // 장바구니 항목 테이블 매핑
+@Table(name = "CartItem")
 public class CartItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,16 +44,20 @@ public class CartItemEntity {
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId; // 추가된 필드
+    private Integer userId;
 
-    public static CartItemEntity create(CartEntity cart, ProductEntity product, Integer quantity, BigDecimal price, Integer userId) {
+    @Column(name = "size", nullable = false)
+    private Integer size;
+
+    public static CartItemEntity create(CartEntity cart, ProductEntity product, Integer quantity, BigDecimal price, Integer userId, Integer size) {
         return CartItemEntity.builder()
             .cart(cart)
             .product(product)
             .quantity(quantity)
             .price(price)
             .totalPrice(price.multiply(BigDecimal.valueOf(quantity)))
-            .userId(userId) // 사용자 ID 설정
+            .userId(userId)
+            .size(size)
             .build();
     }
 }

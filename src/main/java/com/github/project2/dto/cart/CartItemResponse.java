@@ -13,6 +13,7 @@ public class CartItemResponse {
     private Integer userId;
     private Integer productId;
     private Integer quantity;
+    private Integer size;
     private BigDecimal price;
     private BigDecimal totalPrice;
     private String productImageUrl;
@@ -24,6 +25,7 @@ public class CartItemResponse {
             .id(cartItem.getId())
             .userId(cartItem.getCart().getUser().getId()) // 유저 ID 설정
             .productId(cartItem.getProduct().getId())
+            .size(cartItem.getSize())
             .quantity(cartItem.getQuantity())
             .price(cartItem.getPrice())
             .totalPrice(cartItem.getTotalPrice())
