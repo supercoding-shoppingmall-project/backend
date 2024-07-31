@@ -1,6 +1,7 @@
 package com.github.project2.service.sale;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.github.project2.config.S3Config;
 import com.github.project2.dto.sale.*;
@@ -42,25 +43,34 @@ public class SaleService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private String localLocation = "C:\\Users\\jk059\\OneDrive\\바탕 화면\\shoe";
+//    private String localLocation = "C:\\Users\\jk059\\OneDrive\\바탕 화면\\shoe";
 
 
     public String imageUpload(MultipartFile file) throws IOException {
+        // 원본 파일 이름에서 확장자 추출
         String fileName = file.getOriginalFilename();
         String ext = fileName.substring(fileName.lastIndexOf("."));
 
+        // 고유한 파일 이름 생성
         String uuidFileName = UUID.randomUUID() + ext;
-        String localPath = localLocation + uuidFileName;
 
-        File localFile = new File(localPath);
-        file.transferTo(localFile);
+        // ObjectMetadata 설정
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());  // 파일의 Content-Type 설정
+        metadata.setContentLength(file.getSize());       // 파일 크기 설정
 
-        s3Config.amazonS3Client().putObject(new PutObjectRequest(bucket, uuidFileName, localFile).withCannedAcl(CannedAccessControlList.PublicRead));
-        String s3Url = s3Config.amazonS3Client().getUrl(bucket, uuidFileName).toString();
+        // 메모리에서 직접 S3로 업로드
+        PutObjectRequest putObjectRequest = new PutObjectRequest(
+                bucket,
+                uuidFileName,
+                file.getInputStream(),
+                metadata
+        ).withCannedAcl(CannedAccessControlList.PublicRead);  // 공개 읽기 권한 설정
 
-        localFile.delete();
+        s3Config.amazonS3Client().putObject(putObjectRequest);
 
-        return s3Url;
+        // 업로드된 파일의 S3 URL 반환
+        return s3Config.amazonS3Client().getUrl(bucket, uuidFileName).toString();
     }
 
     @Transactional
