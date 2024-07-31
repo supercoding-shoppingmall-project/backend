@@ -16,5 +16,5 @@ public interface ProductSizeRepository extends JpaRepository<ProductSizeEntity, 
     List<ProductSizeEntity> findByProductId(Integer productId);
 
 
-
+    Optional<ProductSizeEntity> findByProductIdAndSize(Integer productId, Integer size);
 }
