@@ -1,6 +1,7 @@
 package com.github.project2.entity.user;
 
-import com.github.project2.dto.user.UserBody;
+
+import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.entity.user.enums.Gender;
 import com.github.project2.entity.user.enums.Role;
 import com.github.project2.entity.user.enums.Status;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -53,6 +55,9 @@ public class UserEntity {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "sellerId",cascade = CascadeType.REMOVE,orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<ProductEntity> productEntityList;
 
     @PrePersist
     protected void onCreate() {
