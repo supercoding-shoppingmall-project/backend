@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/mypage")
@@ -25,8 +28,8 @@ public class UserMyPageController {
 	}
 
 	@PostMapping("/profile-image/{userId}")
-	public ResponseEntity<UserMyPageProfileImageResponse> createAndUpdateUserProfileImage(@PathVariable Integer userId, @RequestBody UserMyPageProfileImageCreateRequest request) {
-		UserMyPageProfileImageResponse response = userMyPageService.createAndUpdateUserProfileImage(userId, request);
+	public ResponseEntity<UserMyPageProfileImageResponse> createAndUpdateUserProfileImage(@PathVariable Integer userId, @RequestParam("file") MultipartFile file) throws IOException {
+		UserMyPageProfileImageResponse response = userMyPageService.createAndUpdateUserProfileImage(userId, file);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
@@ -35,8 +38,9 @@ public class UserMyPageController {
 		return ResponseEntity.ok(userMyPageService.getUserProfileImageById(id));
 	}
 
-	@PutMapping("/profile-image/{id}")
-	public ResponseEntity<UserMyPageProfileImageResponse> updateUserProfileImage(@PathVariable Integer id, @RequestBody UserMyPageProfileImageUpdateRequest profileImageRequest) {
-		return ResponseEntity.ok(userMyPageService.updateUserProfileImage(id, profileImageRequest));
+	@PutMapping("/profile-image/{userId}")
+	public ResponseEntity<UserMyPageProfileImageResponse> updateUserProfileImage(@PathVariable Integer userId, @RequestParam("file") MultipartFile file) throws IOException {
+		UserMyPageProfileImageResponse response = userMyPageService.updateUserProfileImage(userId, file);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

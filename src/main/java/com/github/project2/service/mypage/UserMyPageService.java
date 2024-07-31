@@ -11,7 +11,9 @@ import com.github.project2.service.exceptions.NotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -20,6 +22,7 @@ public class UserMyPageService {
 
 	private final UserMyPageRepository userMyPageRepository;
 	private final UserMyPageProfileImageRepository userMyPageProfileImageRepository;
+	private final S3Service s3Service;
 
 	// 사용자 정보를 ID로 조회하여 반환하는 메서드
 	public UserMyPageResponse getUserById(Integer id) {
@@ -52,9 +55,12 @@ public class UserMyPageService {
 		return response;
 	}
 
-	public UserMyPageProfileImageResponse createAndUpdateUserProfileImage(Integer userId, UserMyPageProfileImageCreateRequest request) {
+	public UserMyPageProfileImageResponse createAndUpdateUserProfileImage(Integer userId, MultipartFile file) throws IOException {
 		UserEntity user = userMyPageRepository.findById(userId)
 				.orElseThrow(() -> new NotFoundException("User not found"));
+
+		// 프로필 이미지 업로드
+		String profileImageUrl = s3Service.uploadFile(file);  // S3Service를 사용하여 파일 업로드
 
 		// 프로필 이미지가 이미 존재하는지 확인
 		Optional<UserMyPageProfileImage> existingProfileImage = userMyPageProfileImageRepository.findByUserId(userId);
@@ -62,14 +68,14 @@ public class UserMyPageService {
 		if (existingProfileImage.isPresent()) {
 			// 존재하면 업데이트 수행
 			UserMyPageProfileImage userMyPageProfileImage = existingProfileImage.get();
-			userMyPageProfileImage.setProfileImageUrl(request.getProfileImageUrl());
+			userMyPageProfileImage.setProfileImageUrl(profileImageUrl);
 			userMyPageProfileImageRepository.save(userMyPageProfileImage);
 			return toUserMyPageProfileImageResponse(userMyPageProfileImage);
 		} else {
 			// 존재하지 않으면 새로 생성
 			UserMyPageProfileImage userMyPageProfileImage = new UserMyPageProfileImage();
 			userMyPageProfileImage.setUser(user);
-			userMyPageProfileImage.setProfileImageUrl(request.getProfileImageUrl());
+			userMyPageProfileImage.setProfileImageUrl(profileImageUrl);
 
 			UserMyPageProfileImage savedProfileImage = userMyPageProfileImageRepository.save(userMyPageProfileImage);
 			return toUserMyPageProfileImageResponse(savedProfileImage);
@@ -83,11 +89,14 @@ public class UserMyPageService {
 	}
 
 
-	public UserMyPageProfileImageResponse updateUserProfileImage(Integer id, UserMyPageProfileImageUpdateRequest profileImageRequest) {
+	public UserMyPageProfileImageResponse updateUserProfileImage(Integer id, MultipartFile file) throws IOException {
 		UserMyPageProfileImage userMyPageProfileImage = userMyPageProfileImageRepository.findByUserId(id)
 				.orElseThrow(() -> new NotFoundException("User not found"));
 
-		userMyPageProfileImage.setProfileImageUrl(profileImageRequest.getProfileImageUrl());
+
+		String profileImageUrl = s3Service.uploadFile(file);
+
+		userMyPageProfileImage.setProfileImageUrl(profileImageUrl);
 		userMyPageProfileImageRepository.save(userMyPageProfileImage);
 
 		return toUserMyPageProfileImageResponse(userMyPageProfileImage);
