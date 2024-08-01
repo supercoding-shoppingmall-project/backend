@@ -110,4 +110,32 @@ public class OrderService {
 
 		return orderResponse;
 	}
+
+	/**
+	 * 주어진 사용자 ID로 주문 목록을 조회하는 메서드
+	 *
+	 * @param userId 사용자 ID
+	 * @return 사용자의 주문 목록을 OrderResponse 객체로 변환하여 반환
+	 */
+	@Transactional
+	public List<OrderResponse> getOrdersByUserId(Integer userId) {
+		// 주어진 사용자 ID로 주문 목록을 조회합니다.
+		List<OrderEntity> orders = orderRepository.findByUserId(userId);
+
+		// 주문 목록을 OrderResponse로 변환하여 반환.
+		return orders.stream()
+				.map(order -> {
+					// 각 주문의 주문 항목 목록을 OrderItemResponse로 변환.
+					List<OrderItemResponse> orderItemResponses = order.getOrderItems().stream()
+							.map(OrderItemResponse::from)
+							.collect(Collectors.toList());
+
+					// OrderEntity를 OrderResponse로 변환.
+					OrderResponse orderResponse = OrderResponse.from(order, orderItemResponses);
+
+					// 추가 정보를 설정하지 않고 기본 정보만 반환.
+					return orderResponse;
+				})
+				.collect(Collectors.toList());
+	}
 }
