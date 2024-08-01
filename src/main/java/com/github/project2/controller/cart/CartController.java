@@ -54,10 +54,10 @@ public class CartController {
      * @return            삭제된 물품의 정보를 담은 응답 본문
      */
     @DeleteMapping("/{userId}/items/{cartItemId}")
-    public ResponseEntity<CartItemResponse> removeCartItem(@PathVariable Integer userId, @PathVariable Integer cartItemId) {
+    public ResponseEntity removeCartItem(@PathVariable Integer userId, @PathVariable Integer cartItemId) {
         // 장바구니에서 물품을 삭제하고 응답 객체 생성
         CartItemResponse cartItemResponse = cartService.removeCartItem(userId, cartItemId);
-        // 응답 본문과 상태 코드를 반환
-        return new ResponseEntity<>(cartItemResponse, HttpStatus.OK);
+        // 상태코드와 문자열 반환
+        return  ResponseEntity.ok("삭제되었습니다.");
     }
 }

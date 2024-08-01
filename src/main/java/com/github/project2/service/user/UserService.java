@@ -59,7 +59,8 @@ public class UserService  {
             throw new InvalidValueException("삭제된 회원으로 로그인 할 수 없습니다.");
         }
         // token 생성
-        String token = jwtTokenProvider.generateToken(loginRequest.getEmail());
+        int UserId = foundedUser.getId();
+        String token = jwtTokenProvider.generateToken(loginRequest.getEmail(), UserId);
         return token;
     }
 
