@@ -29,4 +29,13 @@ public class CartEntity {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItemEntity> cartItems = new ArrayList<>();
+
+    // 스태틱 팩토리 메서드
+    public static CartEntity create(UserEntity user) {
+        CartEntity cart = new CartEntity();
+        cart.setUser(user);
+        cart.setTotalPrice(BigDecimal.ZERO);
+        cart.setCartItems(new ArrayList<>());
+        return cart;
+    }
 }

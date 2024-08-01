@@ -42,7 +42,7 @@ public class SaleService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private String localLocation = "C:\\Users\\wnsdu\\OneDrive\\바탕 화면\\1212";
+    private String localLocation = "C:\\Users\\jk059\\OneDrive\\바탕 화면\\shoe";
 
 
     public String imageUpload(MultipartFile file) throws IOException {
