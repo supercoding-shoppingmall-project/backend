@@ -10,4 +10,12 @@ import java.util.List;
 public class CartRequest {
     private Integer userId;
     private List<CartItemRequest> items;
+
+    // 스태틱 팩토리 메서드
+    public static CartRequest of(Integer userId, List<CartItemRequest> items) {
+        return CartRequest.builder()
+            .userId(userId)
+            .items(items)
+            .build();
+    }
 }

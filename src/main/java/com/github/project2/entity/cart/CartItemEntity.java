@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="CartItem") // 장바구니 항목 테이블 매핑
+@Table(name = "CartItem")
 public class CartItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,21 @@ public class CartItemEntity {
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice = BigDecimal.ZERO;
 
-//    @Column(name = "created_at", nullable = false, updatable = false)
-//    @Generated(GenerationTime.INSERT)
-//    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+
+    @Column(name = "size", nullable = false)
+    private Integer size;
+
+    public static CartItemEntity create(CartEntity cart, ProductEntity product, Integer quantity, BigDecimal price, Integer userId, Integer size) {
+        return CartItemEntity.builder()
+            .cart(cart)
+            .product(product)
+            .quantity(quantity)
+            .price(price)
+            .totalPrice(price.multiply(BigDecimal.valueOf(quantity)))
+            .userId(userId)
+            .size(size)
+            .build();
+    }
 }
