@@ -45,13 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || "/api/user/signup".equals(requestURI)
                 || "/api/product/all".equals(requestURI)
                 || "/api/cart/*".equals(requestURI)
-                || "/api/checkout".equals(requestURI)
-                || "/api/sell".equals(requestURI)
                 || requestURI.startsWith("/api/cart")
                 || requestURI.startsWith("/api/product/category")
                 || requestURI.startsWith("/api/product")
                 || requestURI.startsWith("/api/product/header")
-                || requestURI.startsWith("/api/sell")){
+        ){
             filterChain.doFilter(request, response);
             return;
         }
