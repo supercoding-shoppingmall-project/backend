@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // token 검사
         String jwtToken = jwtTokenProvider.resolveToken(request);
         if (jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String email = jwtTokenProvider.extractUserEmail(jwtToken);
+            String email = jwtTokenProvider.extractEmail(jwtToken);
             log.info("Extracted Email: " + email);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
