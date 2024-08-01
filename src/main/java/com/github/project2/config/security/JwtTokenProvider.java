@@ -34,9 +34,14 @@ public class JwtTokenProvider {
 
     private long tokenValidMillisecond = 1000L * 60 * 60;; // 1시간
 
-    public String extractUserEmail(String token) {
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        return claims.getSubject();
+    // 이메일을 추출하는 메소드
+    public String extractEmail(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("email", String.class);
     }
 
     public String resolveToken(HttpServletRequest request) {
@@ -48,12 +53,15 @@ public class JwtTokenProvider {
         }
     }
     // token 발급
-    public String generateToken(String email) {
+    public String generateToken(String email, int userId) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("email", email);
+        claims.put("userId", userId);
+
         Date now = new Date();
+
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidMillisecond))
                 .signWith(SignatureAlgorithm.HS256, secretKey)

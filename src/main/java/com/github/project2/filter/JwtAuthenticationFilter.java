@@ -45,13 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || "/api/user/signup".equals(requestURI)
                 || "/api/product/all".equals(requestURI)
                 || "/api/cart/*".equals(requestURI)
-                || "/api/checkout".equals(requestURI)
-                || "/api/sell".equals(requestURI)
                 || requestURI.startsWith("/api/cart")
                 || requestURI.startsWith("/api/product/category")
                 || requestURI.startsWith("/api/product")
                 || requestURI.startsWith("/api/product/header")
-                || requestURI.startsWith("/api/sell")){
+        ){
             filterChain.doFilter(request, response);
             return;
         }
@@ -59,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // token 검사
         String jwtToken = jwtTokenProvider.resolveToken(request);
         if (jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String email = jwtTokenProvider.extractUserEmail(jwtToken);
+            String email = jwtTokenProvider.extractEmail(jwtToken);
             log.info("Extracted Email: " + email);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);

@@ -1,6 +1,7 @@
 package com.github.project2.entity.user;
 
 
+import com.github.project2.dto.mypage.UserMyPageUpdateRequest;
 import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.entity.user.enums.Gender;
 import com.github.project2.entity.user.enums.Role;
@@ -70,5 +71,21 @@ public class UserEntity {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
         }
+    }
+
+    // 사용자 정보를 업데이트하는 메서드
+    public void updateDetails(UserMyPageUpdateRequest request) {
+        this.email = request.getEmail();
+        this.name = request.getName();
+        this.phone = request.getPhone();
+        this.address = request.getAddress();
+        this.gender = Gender.valueOf(request.getGender());
+    }
+
+    // 스태틱 팩토리 메서드
+    public static UserEntity from(UserMyPageUpdateRequest request) {
+        UserEntity user = new UserEntity();
+        user.updateDetails(request);
+        return user;
     }
 }

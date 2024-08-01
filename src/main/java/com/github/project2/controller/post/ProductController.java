@@ -22,7 +22,7 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<List<ProductAllDto>> getProductAlls(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int pageSize){
+            @RequestParam(defaultValue = "1200") int pageSize){
         List<ProductAllDto> products = productService.getProductAlls(page, pageSize);
         return ResponseEntity.ok(products);
     }
@@ -31,7 +31,7 @@ public class ProductController {
     public ResponseEntity<List<ProductCategoryDto>> getProductCategorys(
             @PathVariable Integer category,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int pageSize){
+            @RequestParam(defaultValue = "1200") int pageSize){
         List<ProductCategoryDto> productCategory = productService.getProductCategorys(category, page, pageSize);
         return ResponseEntity.ok(productCategory);
     }
