@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 public class OrderItemResponse {
 	private Integer id;
-	private Integer productId;
+	private String productName;
 	private Integer quantity;
 	private BigDecimal price;
 	private BigDecimal totalPrice;
@@ -23,7 +23,7 @@ public class OrderItemResponse {
 	public static OrderItemResponse from(OrderItemEntity orderItem) {
 		return OrderItemResponse.builder()
 				.id(orderItem.getId())
-				.productId(orderItem.getProduct().getId())
+				.productName(orderItem.getProduct().getName())
 				.quantity(orderItem.getQuantity())
 				.price(orderItem.getPrice())
 				.totalPrice(orderItem.getTotalPrice())
