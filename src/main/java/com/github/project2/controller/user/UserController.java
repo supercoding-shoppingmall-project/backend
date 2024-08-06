@@ -59,6 +59,7 @@ public class UserController {
         return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 
+
     @Tag(name = "post", description = "회원삭제 API")
     @Operation(summary = "Parameter로 비밀번호를 받아 회원 삭제")
     @DeleteMapping("/delete")
