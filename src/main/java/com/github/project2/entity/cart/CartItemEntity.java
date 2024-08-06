@@ -60,4 +60,13 @@ public class CartItemEntity {
             .size(size)
             .build();
     }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+        this.totalPrice = this.price.multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }

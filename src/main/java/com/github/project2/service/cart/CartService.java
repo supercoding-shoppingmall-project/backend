@@ -61,18 +61,33 @@ public class CartService {
             throw new NotFoundException("Product size out of stock");
         }
 
-        // 장바구니 아이템을 생성하고 저장
-        CartItemEntity cartItem = CartItemEntity.create(cart, productSize.getProduct(), cartItemRequest.getQuantity(), productSize.getProduct().getPrice(), userId, cartItemRequest.getSize());
-        cartItemRepository.save(cartItem);
+        // 동일한 상품, 동일한 사이즈, 동일한 사용자의 장바구니 아이템 확인
+        CartItemEntity existingCartItem = cart.getCartItems().stream()
+                .filter(item -> item.getProduct().getId().equals(cartItemRequest.getProductId()) &&
+                        item.getSize().equals(cartItemRequest.getSize()))
+                .findFirst()
+                .orElse(null);
 
-        // 장바구니에 새로운 아이템을 추가
-        cart.getCartItems().add(cartItem);
+        CartItemEntity cartItem;
 
+        if (existingCartItem != null) {
+            // 기존 장바구니 아이템의 수량을 증가시킴
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemRequest.getQuantity());
+            existingCartItem.setTotalPrice(existingCartItem.getPrice().multiply(BigDecimal.valueOf(existingCartItem.getQuantity())));
+            cartItemRepository.save(existingCartItem);
+            cartItem = existingCartItem;
+        } else {
+            // 장바구니 아이템을 새로 생성하고 저장
+            cartItem = CartItemEntity.create(cart, productSize.getProduct(), cartItemRequest.getQuantity(), productSize.getProduct().getPrice(), userId, cartItemRequest.getSize());
+            cartItemRepository.save(cartItem);
+            // 장바구니에 새로운 아이템을 추가
+            cart.getCartItems().add(cartItem);
+        }
         // 장바구니의 총 가격을 업데이트
         updateCartTotalPrice(cart);
 
         // 상품 이미지 URL을 조회
-        String productImageUrl = cartItem.getProduct().getImages().stream()
+        String productImageUrl = productSize.getProduct().getImages().stream()
             .findFirst()
             .map(ProductImageEntity::getImageUrl)
             .orElse(null);
