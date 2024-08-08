@@ -1,6 +1,5 @@
 package com.github.project2.entity.user;
 
-
 import com.github.project2.dto.mypage.UserMyPageUpdateRequest;
 import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.entity.user.enums.Gender;

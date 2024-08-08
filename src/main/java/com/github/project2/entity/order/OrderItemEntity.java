@@ -1,7 +1,5 @@
 package com.github.project2.entity.order;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.github.project2.entity.post.ProductEntity;
 import com.github.project2.entity.post.ProductOptionEntity;
 import jakarta.persistence.*;

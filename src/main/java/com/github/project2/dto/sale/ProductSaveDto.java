@@ -1,6 +1,5 @@
 package com.github.project2.dto.sale;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
@@ -20,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class ProductSaveDto {
-
 
     private String seller;
     private String category;
