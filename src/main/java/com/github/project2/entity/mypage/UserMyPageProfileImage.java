@@ -1,6 +1,5 @@
 package com.github.project2.entity.mypage;
 
-
 import com.github.project2.entity.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;

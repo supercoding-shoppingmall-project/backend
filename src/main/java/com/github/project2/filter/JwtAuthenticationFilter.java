@@ -40,6 +40,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         log.info("Request URI: " + requestURI);
 
+        // Swagger 관련 경로 필터 통과
+        if (requestURI.startsWith("/swagger-ui/")
+                || requestURI.startsWith("/v3/")
+                || requestURI.startsWith("/swagger-resources/")
+                || requestURI.startsWith("/webjars/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 회원가입, 로그인, 물품 조회 요청 필터 통과
         if ("/api/user/login".equals(requestURI)
                 || "/api/user/signup".equals(requestURI)
