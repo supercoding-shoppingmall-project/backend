@@ -1,6 +1,5 @@
 package com.github.project2.config.security;
 
-
 import com.github.project2.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +17,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
-
 
 @Configuration
 @EnableWebSecurity
@@ -40,17 +38,19 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll())
-//                        .requestMatchers(
-//                                "/api/user/login",
-//                                "/api/user/signup",
-//                                "/api/user/logout").permitAll() // 요청 허용
-//                        .anyRequest().authenticated() // 나머지 요청 인증 필요
-//                )
+                        // Swagger 관련 경로 허용
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/swagger-ui.html",
+                                "/webjars/**"
+                        ).permitAll()
+                        .anyRequest().permitAll()
+                )
                         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -60,7 +60,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://sc-shoppingmall.netlify.app/"));
+        configuration.setAllowedOrigins(List.of("https://sc-shoppingmall.netlify.app/", "http://localhost:8080"));
         configuration.setAllowCredentials(true); // token을 주고받을 때 필요
         configuration.addExposedHeader("Authorization"); // token
         configuration.addAllowedHeader("*");

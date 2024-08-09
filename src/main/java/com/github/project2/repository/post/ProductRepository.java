@@ -13,16 +13,10 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
-
     Page<ProductEntity> findProductEntityByTotalStockGreaterThanAndEndDateAfter(int totalStock, LocalDate endDate, Pageable pageable);
-
     Page<ProductEntity> findProductCategoryEntityByEndDateAfterAndCategoryId_CategoryId(LocalDate endDate, Integer categoryId, Pageable pageable);
-
     Optional<ProductEntity> findById(Integer id);
-
     List<ProductEntity> findByCategoryId_CategoryId(Integer categoryId);
-
     List<ProductEntity> findBySellerId(UserEntity user);
-
     Optional<ProductEntity> findByName(String productName);
 }

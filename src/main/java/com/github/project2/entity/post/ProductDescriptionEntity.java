@@ -1,6 +1,5 @@
 package com.github.project2.entity.post;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +23,4 @@ public class ProductDescriptionEntity {
 
     @Column(name = "description", nullable = false)
     private String description;
-
-
 }

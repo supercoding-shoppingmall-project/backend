@@ -2,22 +2,15 @@ package com.github.project2.controller.user;
 
 import com.github.project2.dto.user.LoginRequest;
 import com.github.project2.dto.user.UserBody;
-import com.github.project2.entity.user.UserEntity;
-import com.github.project2.repository.user.UserRepository;
 import com.github.project2.service.user.AuthenticationFacade;
 import com.github.project2.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;

@@ -16,7 +16,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3Service {
 
-
 	private final AmazonS3Client amazonS3Client;
 
 	@Value("${cloud.aws.s3.bucket}")
@@ -31,5 +30,4 @@ public class S3Service {
 
 		return amazonS3Client.getUrl(bucketName, filePath).toString();
 	}
-
 }

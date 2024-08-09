@@ -12,6 +12,7 @@ import com.github.project2.entity.user.UserEntity;
 import com.github.project2.repository.post.*;
 
 import com.github.project2.repository.user.UserRepository;
+import com.github.project2.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,9 +43,6 @@ public class SaleService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
-//    private String localLocation = "C:\\Users\\jk059\\OneDrive\\바탕 화면\\shoe";
-
 
     public String imageUpload(MultipartFile file) throws IOException {
         // 원본 파일 이름에서 확장자 추출
@@ -82,9 +80,7 @@ public class SaleService {
         UserEntity user = userRepository.findByEmail(productSaveDto.getSeller())
                 .orElseThrow(() -> new IllegalArgumentException("판매자 email을 찾을 수 없습니다"));
 
-
         // 제품 엔티티 생성 및 저장
-
         ProductEntity productEntity = ProductEntity.builder()
                 .name(productSaveDto.getProductName())
                 .price(productSaveDto.getProductPrice())
@@ -126,32 +122,27 @@ public class SaleService {
 
             productImageRepository.save(productImageEntity);
         }
-
         return productEntity;
     }
 
     public List<ProductGetDto> getProductsBySellerEmail(String email) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("판매자 email을 찾을 수 없습니다"));
-
         List<ProductEntity> products = productRepository.findBySellerId(user);
 
         // 상품이 없는 경우 예외 처리
         if (products.isEmpty()) {
-            throw new RuntimeException("해당 판매자의 제품을 찾을 수 없습니다");
+            throw new NotFoundException("해당 판매자의 제품을 찾을 수 없습니다");
         }
 
         return products.stream()
                 .map(product -> {
-
                     Integer productId = product.getId();
                     List<ProductSizeEntity> sizes = productSizeRepository.findByProductId(productId);
                     List<ProductImageEntity> images = productImageRepository.findByProduct(product);
-
                     List<StockDto> stockDtos = sizes.stream()
                             .map(size -> new StockDto(size.getSize(), size.getSizeStock()))
                             .collect(Collectors.toList());
-
                     List<String> imageUrls = images.stream()
                             .map(ProductImageEntity::getImageUrl)
                             .collect(Collectors.toList());
@@ -169,25 +160,11 @@ public class SaleService {
     }
 
     public ProductSizeEntity updateStock(String productName, StockDto stockDto) {
-
         ProductEntity product = productRepository.findByName(productName)
                 .orElseThrow(() -> new RuntimeException("제품의 이름 없음"));
-
-
         ProductSizeEntity productSize = productSizeRepository.findByProductAndSize(product, stockDto.getSize())
                 .orElseThrow(() -> new RuntimeException("사이즈 없음"));
-
-
         productSize.setSizeStock(stockDto.getSizeStock());
-
-
         return productSizeRepository.save(productSize);
     }
-
-
-
-
 }
-
-
-

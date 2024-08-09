@@ -1,6 +1,5 @@
 package com.github.project2.service.mypage;
 
-
 import com.github.project2.dto.mypage.*;
 import com.github.project2.entity.mypage.UserMyPageProfileImage;
 import com.github.project2.entity.user.UserEntity;

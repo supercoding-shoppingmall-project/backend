@@ -1,6 +1,5 @@
 package com.github.project2.controller.sale;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.project2.dto.sale.ProductGetDto;
@@ -30,7 +29,6 @@ public class SalesController {
 
     @Autowired
     private  SaleService saleService;
-
 
     //판매자 상품 등록
     @PostMapping(value = "/sell/save", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -63,10 +61,4 @@ public class SalesController {
         ProductSizeEntity updatedProductSize = saleService.updateStock(productName, stockDto);
         return ResponseEntity.ok("재고 수정에성공했습니다.");
     }
-
-
-
-
-
-
 }
