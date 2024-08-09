@@ -16,5 +16,4 @@ public class UserBody {
     private String phone;
     private String address;
     private String gender;
-
 }

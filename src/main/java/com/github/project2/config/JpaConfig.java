@@ -1,6 +1,5 @@
 package com.github.project2.config;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -29,8 +28,6 @@ public class JpaConfig {
     @Autowired
     private DataSourceConfig dataSourceConfig;
 
-
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean1(@Qualifier("dataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -50,9 +47,7 @@ public class JpaConfig {
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.format_sql", "true");
         properties.put("hibernate.use_sql_comment", "true");
-
         em.setJpaPropertyMap(properties);
-
         return em;
     }
 
@@ -63,7 +58,6 @@ public class JpaConfig {
         dataSource.setUrl(dataSourceConfig.getUrl());
         dataSource.setUsername(dataSourceConfig.getUsername());
         dataSource.setPassword(dataSourceConfig.getPassword());
-
         return dataSource;
     }
 }
