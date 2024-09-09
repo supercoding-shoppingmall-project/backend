@@ -16,12 +16,12 @@
 ## 팀원 구성 및 역할
 
 | 이름         | 역할                  | GitHub                                         | 이메일                       |
-|------------|---------------------| ---------------------------------------------- | ---------------------------- |
-| 😎 조일운(PM, DevOps) | 인증 및 사용자 관리, AWS 배포 | [OneCloudd](https://github.com/OneCloudd)      | whdlfdns12@gmail.com          |
-| 😊 이준영(BE) | 물품 조회 및 카테고리 관리     | [junyoung22](https://github.com/junyoung22)    | wnsdud5051@naver.com          |
-| 😁 김상윤(BE) | 장바구니 관리             | [94KSY](https://github.com/94KSY)              | -                            |
-| 🙂 김선준(BE) | 마이페이지 관리            | [godssun](https://github.com/godssun)          | -                            |
-| 🤩 김준규(BE) | 물품 등록 및 재고 관리     | [kjg0223](https://github.com/kjg0223)          | -                            |
+|------------|---------------------| ---------------------------------------------- | -------------------------- |
+| 😎 조일운(PM) | 인증 및 사용자 관리, AWS 배포 | [OneCloudd](https://github.com/OneCloudd)      | whdlfdns12@gmail.com        |
+| 😊 이준영(BE) | 물품 조회 및 카테고리 관리     | [junyoung22](https://github.com/junyoung22)    | wnsdud5051@naver.com        |
+| 😁 김상윤(BE) | 장바구니 관리             | [94KSY](https://github.com/94KSY)              | gin4047@naver.com              |
+| 🙂 김선준(BE) | 마이페이지 관리            | [godssun](https://github.com/godssun)          | sunsss9532@gmail.com        |
+| 🤩 김준규(BE) | 물품 등록 및 재고 관리     | [kjg0223](https://github.com/kjg0223)          | sdj04094@naver.com     |
 
 ---
 
